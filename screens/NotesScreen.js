@@ -21,7 +21,7 @@ export default function NotesScreen({ navigation, route }) {
             size={30}
             color="black"
             style={{
-              color: "#f55",
+              color: "black",
               marginRight: 10,
             }}
           />
@@ -90,7 +90,7 @@ export default function NotesScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffc",
+    backgroundColor: "beige",
     alignItems: "center",
     justifyContent: "center",
   },

@@ -12,13 +12,13 @@ export default function NotesStack() {
         options={{
           title: "Notes, a Todo App",
           headerStyle: {
-            backgroundColor: "yellow",
+            backgroundColor: "tomato",
             height: 100,
             shadowColor: "black",
             shadowOpacity: 0.2,
             shadowRadius: 5,
           },
-          headerTintColor: "#f55",
+          headerTintColor: "black",
           headerTitleStyle: {
             fontSize: 24,
             fontWeight: "bold",

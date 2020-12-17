@@ -14,7 +14,7 @@ export default function NotesScreen({ navigation, route }) {
   const db = firebase.firestore().collection("todos");
 
   useEffect(() => {
-    const unsubscribe = db.onSnapshot((collection) => {
+    const unsubscribe = db.orderBy("created").onSnapshot((collection) => {
       const updatedNotes = collection.docs.map((doc) => {
         const noteObject = {
           ...doc.data(),
@@ -56,10 +56,10 @@ export default function NotesScreen({ navigation, route }) {
       const newNote = {
         title: route.params.text,
         done: false,
-        id: notes.length.toString(),
+        created: firebase.firestore.FieldValue.serverTimestamp(),
       };
       db.add(newNote);
-      setNotes([...notes, newNote]);
+      route.params.text=""
     }
   }, [route.params?.text]);
 

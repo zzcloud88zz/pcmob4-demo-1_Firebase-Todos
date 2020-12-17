@@ -11,16 +11,14 @@ import firebase from "../database/firebaseDB";
 
 export default function NotesScreen({ navigation, route }) {
   const [notes, setNotes] = useState([]);
+  const db = firebase.firestore().collection("todos");
 
   useEffect(() => {
-    const unsubscribe = firebase
-      .firestore()
-      .collection("todos")
-      .onSnapshot((snapshot) => {
-        const updatedNotes = snapshot.docs.map((doc) => doc.data());
-        setNotes(updatedNotes);
-      });
-
+    const unsubscribe = db.onSnapshot((collection) => {
+      const updatedNotes = collection.docs.map((doc) => doc.data());
+      console.log(updatedNotes);
+      setNotes(updatedNotes);
+    });
     return () => {
       unsubscribe();
     };
@@ -53,7 +51,7 @@ export default function NotesScreen({ navigation, route }) {
         done: false,
         id: notes.length.toString(),
       };
-      firebase.firestore().collection("todos").add(newNote);
+      db.add(newNote);
       setNotes([...notes, newNote]);
     }
   }, [route.params?.text]);
@@ -66,7 +64,11 @@ export default function NotesScreen({ navigation, route }) {
   function deleteNote(id) {
     console.log("Deleting " + id);
     // To delete that item, we filter out the item we don't want
-    setNotes(notes.filter((item) => item.id !== id));
+    db.where("id", "==", id)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => doc.ref.delete());
+      });
   }
 
   // The function to render each row in our FlatList

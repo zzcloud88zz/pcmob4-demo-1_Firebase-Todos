@@ -15,10 +15,17 @@ export default function NotesScreen({ navigation, route }) {
 
   useEffect(() => {
     const unsubscribe = db.onSnapshot((collection) => {
-      const updatedNotes = collection.docs.map((doc) => doc.data());
-      console.log(updatedNotes);
+      const updatedNotes = collection.docs.map((doc) => {
+        const noteObject = {
+          ...doc.data(),
+          id: doc.id,
+        };
+        console.log(noteObject);
+        return noteObject;
+      });
       setNotes(updatedNotes);
     });
+
     return () => {
       unsubscribe();
     };
@@ -64,11 +71,7 @@ export default function NotesScreen({ navigation, route }) {
   function deleteNote(id) {
     console.log("Deleting " + id);
     // To delete that item, we filter out the item we don't want
-    db.where("id", "==", id)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => doc.ref.delete());
-      });
+    db.doc(id).delete();
   }
 
   // The function to render each row in our FlatList
